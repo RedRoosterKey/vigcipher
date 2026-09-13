@@ -118,10 +118,10 @@ bool doesAlphabetHaveDuplicates(char * alphabet) {
 	}
 
 	for (short i = 0; 0 != alphabet[i] && i < MAX_STRING_SIZE; i++) {
-		if (0 < count[(short) alphabet[i]]) {
+		if (0 < count[(unsigned char) alphabet[i]]) {
 			return (true);
 		}
-		count[(short) alphabet[i]] = 1;
+		count[(unsigned char) alphabet[i]] = 1;
 	}
 	return (false);
 }
