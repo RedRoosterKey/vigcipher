@@ -162,6 +162,28 @@ testErrorOutput '' 'Alphabet cannot have duplicate characters.' "-e -k 0 -a \
 1234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890\
 12345678901234567890123456789012345678901234567890123456"
 
+# Big key failure test Size=257
+#        1         2         3         4         5         6         7         8          9         100
+testReturnValue '' 1 "-a a -e -k \
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+testErrorOutput '' 'Key is longer than max supported size of 256.' "-a a -e -k \
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+# Big key success test Size=256 (at the length limit, one 'a' shorter than above)
+testReturnValue '' 0 "-a a -e -k \
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+# Key length is not checked for duplicates, so a valid, non-error-producing key at the
+# limit should produce no errors at all
+testErrorOutput '' '' "-a a -e -k \
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+
 testOutput 'the quick brown for jumps over the lazy dog' 'wkh txlfn eurzq iru mxpsv ryhu wkh odcb grj' '-p -e -k c -a abcdefghijklmnopqrstuvwxyz'
 testOutput 'wkh txlfn eurzq iru mxpsv ryhu wkh odcb grj' 'the quick brown for jumps over the lazy dog' '-p -d -k c -a abcdefghijklmnopqrstuvwxyz'
 testOutput 'the quick brown for jumps over the lazy dog' 'qww urxuo yggak ugv gjetp dnio izi iprc ady' '-p -e -k word -a abcdefghijklmnopqrstuvwxyz'

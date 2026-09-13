@@ -216,7 +216,7 @@ int main(int argc, char **argv) {
 	bool toUpper = false;
 	bool toLower = false;
 	char alphabet[MAX_STRING_SIZE + 1] = "";
-	char key[MAX_STRING_SIZE] = "";
+	char key[MAX_STRING_SIZE + 1] = "";
 	static struct option long_options[] = { { "alphabet", required_argument, 0,
 			'a' }, { "encrypt", no_argument, 0, 'e' }, { "decrypt", no_argument,
 			0, 'd' }, { "help", no_argument, 0, 'h' }, { "key",
@@ -254,6 +254,12 @@ int main(int argc, char **argv) {
 			return (EXIT_SUCCESS);
 			break;
 		case 'k':
+			if (strnlen(optarg, MAX_STRING_SIZE + 1) > MAX_STRING_SIZE) {
+				fprintf(stderr,
+						"Key is longer than max supported size of %d.\n",
+						MAX_STRING_SIZE);
+				errors = true;
+			}
 			strncpy(key, optarg, MAX_STRING_SIZE);
 			break;
 		case 'l':
