@@ -37,6 +37,9 @@ clean:
 test:
 	bash ../scripts/test.sh
 
+test-asan:
+	bash ../scripts/test-asan.sh
+
 version:
 	bash ../scripts/version.sh
 	
