@@ -1,32 +1,18 @@
-# Object files
+# Build outputs
 *.o
-*.ko
-*.obj
-*.elf
-
-# Precompiled Headers
-*.gch
-*.pch
-
-# Libraries
-*.lib
-*.a
-*.la
-*.lo
-
-# Shared objects (inc. Windows DLLs)
-*.dll
-*.so
-*.so.*
-*.dylib
-
-# Executables
+*.d
+*.dSYM/
 *.exe
 *.out
-*.app
-*.i*86
-*.x86_64
-*.hex
+/vigcipher
+/vigcipher_asan
 
-# Debug files
-*.dSYM/
+# IDE and editor files
+.idea/
+.vscode/
+cmake-build-*/
+*.swp
+*~
+
+# macOS
+.DS_Store

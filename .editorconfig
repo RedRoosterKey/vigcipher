@@ -1,0 +1,12 @@
+# Carries over the code style from the old Eclipse formatter settings.
+# JetBrains IDEs, VS Code (with the EditorConfig extension) and most
+# editors read this file. https://editorconfig.org
+root = true
+
+[*.{c,h}]
+indent_style = tab
+indent_size = 4
+max_line_length = 80
+
+[Makefile]
+indent_style = tab

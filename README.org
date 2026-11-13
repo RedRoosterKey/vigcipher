@@ -3,17 +3,39 @@ Simple terminal program that applies an insecure Vigenère cipher on STDIN and s
 
 [[https://en.wikipedia.org/wiki/Vigen%C3%A8re_cipher][Vigenère cipher]]
 
-* How to build
-Run the following commands:
+* How to install
+** Homebrew (macOS and Linux)
+#+BEGIN_SRC bash
+brew install redroosterkey/tap/vigcipher
+#+END_SRC
+
+** From source
+You need a C compiler and make.
 
 #+BEGIN_SRC bash
-cd Release
-make all && make test
+make && make test
+sudo make install
 #+END_SRC
 
-This will create a program called vigcipher and execute test.sh in the scripts directory.
-If all the tests pass, you should be good to go.  A good start would be to read the help by running:
-#+BEGIN_SRC
-./vigcipher --help
+This installs the =vigcipher= binary and its man page under =/usr/local=.
+Set =PREFIX= to install somewhere else, for example =make install PREFIX=$HOME/.local=.
+=sudo make uninstall= (with the same =PREFIX=) removes them again.
+
+The build honours the usual =CC=, =CFLAGS=, =CPPFLAGS=, =LDFLAGS= and =DESTDIR=
+variables, so it can be driven by a package manager.
+
+* How to use
+#+BEGIN_SRC bash
+vigcipher --help
+man vigcipher
 #+END_SRC
 
+* Development
+#+BEGIN_SRC bash
+make test-asan   # rebuild with AddressSanitizer and run memory checks
+make version     # bump the version in src/version.h
+make clean
+#+END_SRC
+
+* Packaging
+See [[file:packaging/homebrew/README.md][packaging/homebrew/README.md]] for how releases are published to Homebrew.

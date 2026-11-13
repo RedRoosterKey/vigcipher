@@ -1,0 +1,169 @@
+.TH VIGCIPHER 1 2026-11-13 vigcipher "User Commands"
+.SH NAME
+vigcipher \- apply a Vigen\(`ere cipher to standard input
+.SH SYNOPSIS
+.B vigcipher
+.BR \-e | \-d
+.RB { \-a
+.IR alphabet " | " \fB\-q\fP " " name }
+.B \-k
+.I key
+.RB [ \-p ]
+.RB [ \-u | \-l ]
+.br
+.B vigcipher
+.BR \-h | \-v
+.SH DESCRIPTION
+.B vigcipher
+reads text from standard input, shifts each character through an
+alphabet according to a repeating key, and writes the result to standard
+output.
+.PP
+Each input character is looked up in the alphabet. It is moved forward
+(when encrypting) or backward (when decrypting) by the position of the
+current key character in the same alphabet, plus one, wrapping around at
+the end. So with the alphabet
+.B a\-z
+the key character
+.B a
+shifts by 1 and
+.B c
+by 3. The next input character uses the next key character, and the key
+repeats once it runs out.
+.PP
+The Vigen\(`ere cipher has been broken for well over a century.
+.B vigcipher
+is for fun and teaching only; do not use it to protect anything.
+.SH OPTIONS
+Exactly one of
+.B \-e
+or
+.BR \-d ,
+an alphabet
+.RB ( \-a
+or
+.BR \-q ),
+and a key
+.RB ( \-k )
+are required.
+.TP
+.BR \-a ", " \-\-alphabet =\fIalphabet\fP
+The ordered set of characters that can be enciphered. Every character must
+be unique. At most 256 characters.
+.TP
+.BR \-q ", " \-\-predefined\-alpha =\fIname\fP
+Use a built-in alphabet instead of
+.BR \-a .
+.I name
+is one of:
+.RS
+.TP 8
+.B UC
+.B A\-Z
+.TP
+.B LC
+.B a\-z
+.TP
+.B AC
+.B A\-Z
+followed by
+.B a\-z
+.TP
+.B PRINT
+the printable ASCII characters from space to tilde (but see
+.BR BUGS )
+.RE
+.TP
+.BR \-k ", " \-\-key =\fIkey\fP
+The characters that set how far each input character is shifted. Every
+key character must be in the alphabet; repeats are allowed. At most 256
+characters.
+.TP
+.BR \-e ", " \-\-encrypt
+Shift characters forward through the alphabet.
+.TP
+.BR \-d ", " \-\-decrypt
+Shift characters backward through the alphabet.
+.TP
+.BR \-p ", " \-\-passthru
+Copy input characters that are not in the alphabet to the output
+unchanged; the key does not advance for them. Without this option, such a
+character is an error.
+.TP
+.BR \-u ", " \-\-upper
+Convert the input, the alphabet and the key to upper case before
+enciphering. This is an error if it leaves the alphabet with duplicate
+characters.
+.TP
+.BR \-l ", " \-\-lower
+Convert the input, the alphabet and the key to lower case before
+enciphering. This is an error if it leaves the alphabet with duplicate
+characters.
+.TP
+.BR \-h ", " \-\-help
+Print a usage summary and exit.
+.TP
+.BR \-v ", " \-\-version
+Print the version number and exit.
+.SH EXIT STATUS
+.B 0
+on success;
+.B 1
+if an option is missing or invalid, or if the input contains a character
+outside the alphabet and
+.B \-p
+was not given.
+.SH EXAMPLES
+Encrypt a message with the key
+.BR lemon ,
+keeping the spaces:
+.PP
+.RS
+.EX
+$ printf 'attack at dawn' | vigcipher \-e \-p \-q LC \-k lemon
+mygpqw fg sois
+.EE
+.RE
+.PP
+Decrypt it again:
+.PP
+.RS
+.EX
+$ printf 'mygpqw fg sois' | vigcipher \-d \-p \-q LC \-k lemon
+attack at dawn
+.EE
+.RE
+.PP
+A Caesar cipher is a one-character key. With
+.B c
+every letter moves three places:
+.PP
+.RS
+.EX
+$ printf 'the' | vigcipher \-e \-q LC \-k c
+wkh
+.EE
+.RE
+.SH BUGS
+The
+.B PRINT
+alphabet leaves out
+.BR @ ,
+so input containing
+.B @
+is rejected unless
+.B \-p
+is given.
+.SH SEE ALSO
+.UR https://en.wikipedia.org/wiki/Vigen%C3%A8re_cipher
+Vigen\(`ere cipher
+.UE
+.SH AUTHOR
+RedRoosterKey
+.UR https://github.com/RedRoosterKey/vigcipher
+.UE
+.SH COPYRIGHT
+License GPLv3+: GNU GPL version 3 or later
+<https://gnu.org/licenses/gpl.html>.
+This is free software: you are free to change and redistribute it.
+There is NO WARRANTY, to the extent permitted by law.
