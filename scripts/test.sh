@@ -3,10 +3,13 @@ set -e
 # set -v
 
 DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
-PROGRAM="${DIR}/../Release/vigcipher"
-RED=$(tput setaf 1)
-GREEN=$(tput setaf 2)
-NC=$(tput sgr0)
+# Test the binary named by $VIGCIPHER, or the one `make` builds.
+PROGRAM="${VIGCIPHER:-${DIR}/../vigcipher}"
+# Colours are optional: package build machines and CI often run without
+# a terminal, where tput fails and would otherwise abort the script.
+RED=$(tput setaf 1 2>/dev/null || true)
+GREEN=$(tput setaf 2 2>/dev/null || true)
+NC=$(tput sgr0 2>/dev/null || true)
 
 function testOutput() {
     in=${1}

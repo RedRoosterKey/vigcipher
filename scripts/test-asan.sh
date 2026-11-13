@@ -3,17 +3,17 @@ set -e
 
 DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 SRC="${DIR}/../src/vigcipher.c"
-BIN="${DIR}/../Release/vigcipher_asan"
-RED=$(tput setaf 1)
-GREEN=$(tput setaf 2)
-NC=$(tput sgr0)
+BIN="${DIR}/../vigcipher_asan"
+RED=$(tput setaf 1 2>/dev/null || true)
+GREEN=$(tput setaf 2 2>/dev/null || true)
+NC=$(tput sgr0 2>/dev/null || true)
 
 # Build a dedicated AddressSanitizer binary. Regular black-box tests
 # (scripts/test.sh) can't reliably prove out-of-bounds memory access
 # is happening -- the corrupted memory may not affect the output of
 # any given run. ASan instruments every memory access and aborts with
 # a diagnostic the moment one goes out of bounds.
-cc -fsanitize=address -g -O0 -std=c99 -o "${BIN}" "${SRC}"
+"${CC:-cc}" -fsanitize=address -g -O0 -std=c99 -D_GNU_SOURCE -o "${BIN}" "${SRC}"
 
 function testNoSanitizerError() {
 	in=${1}
@@ -45,6 +45,6 @@ function testNoSanitizerError() {
 highBitAlphabet=$'\xff\xfe'
 testNoSanitizerError '' "-e -a ${highBitAlphabet} -k ${highBitAlphabet}"
 
-rm -f "${BIN}"
+rm -rf "${BIN}" "${BIN}.dSYM"
 
 echo "${GREEN}ALL GOOD!${NC}"
